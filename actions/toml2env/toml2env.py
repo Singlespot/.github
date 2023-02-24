@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 import os
 import sys
 import tomllib
@@ -23,6 +23,7 @@ def main():
     print(content)
     env_vars = dict_to_env_vars(content)
     print(env_vars)
+    print(os.environ)
     print(os.environ['GITHUB_ENV'])
 
 
