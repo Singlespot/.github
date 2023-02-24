@@ -25,6 +25,9 @@ def main():
     print(env_vars)
     print(os.environ)
     print(os.environ['GITHUB_ENV'])
+    with open(os.environ['GITHUB_ENV'], 'a') as f:
+        for key, value in env_vars.items():
+            f.write(f'{key}={value}\n')
 
 
 if __name__ == "__main__":
