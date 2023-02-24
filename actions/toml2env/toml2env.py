@@ -17,14 +17,9 @@ def dict_to_env_vars(d: dict[str, Union[str, dict[str, any]]], prefix: str = '')
 
 def main():
     toml_file = sys.argv[1]
-    print(toml_file)
     with open(toml_file, 'rb') as f:
         content = tomllib.load(f)
-    print(content)
     env_vars = dict_to_env_vars(content)
-    print(env_vars)
-    print(os.environ)
-    print(os.environ['GITHUB_ENV'])
     with open(os.environ['GITHUB_ENV'], 'a') as f:
         for key, value in env_vars.items():
             f.write(f'{key}={value}\n')
