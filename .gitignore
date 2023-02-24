@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+__pycache__/
+.mypy_cache/
+*\.conf\.json
+pytest.ini
+.venv
+venv
+secret*.yml
+secret*.yaml

@@ -1,0 +1,16 @@
+name: "toml2env"
+description: "Converts TOML to environment variables"
+author: "Sébastien de Melo <sebastien@singlespot.com>"
+branding:
+  icon: "code"
+  color: "blue"
+inputs:
+    toml:
+        description: "TOML file to convert"
+        required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  entrypoint: "toml2env"
+  args:
+    - ${{ inputs.toml }}
