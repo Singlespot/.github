@@ -1,0 +1,9 @@
+{
+    "name": "Build Docker image and push to AWS ECR",
+    "description": "Build Docker image and push to AWS ECR.",
+    "iconName": "amazon-ecr",
+    "categories": [
+        "Docker",
+        "Python"
+    ]
+}
