@@ -18,7 +18,11 @@ runs:
     - name: Run version extractor
       shell: bash
       run: |
-        # If file_path basename is setup.py or setup.cfg, use python setup.py --version
+        if [ ! -f ${{ inputs.file_path }} ]; then
+          echo "File not found: ${{ inputs.file_path }}"
+          exit 1
+        fi
+        
         file_name=$(basename ${{ inputs.file_path }})
         if [ "$file_name" == "setup.py" ] || [ "$file_name" == "setup.cfg" ]; then
           VERSION=$(python ${{ inputs.file_path }} --version)

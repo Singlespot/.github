@@ -6,7 +6,7 @@ from pathlib import Path
 
 def get_version(pyproject_path: Path) -> str | None:
     try:
-        with pyproject_path.open("rb", encoding="utf-8") as f:
+        with pyproject_path.open("rb") as f:
             data = tomllib.load(f)
 
         # Setuptools
