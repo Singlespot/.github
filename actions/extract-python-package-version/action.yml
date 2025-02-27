@@ -12,7 +12,6 @@ inputs:
 outputs:
   version:
     description: "The extracted version"
-    value: ${{ env.VERSION }}
 runs:
   using: "composite"
   steps:
@@ -23,7 +22,7 @@ runs:
         file_name=$(basename ${{ inputs.file_path }})
         if [ "$file_name" == "setup.py" ] || [ "$file_name" == "setup.cfg" ]; then
           VERSION=$(python ${{ inputs.file_path }} --version)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
         else
-          python ${{ github.action_path }}/extract_version.py --pyproject ${{ inputs.file_path }}
+          VERSION=$(python ${{ github.action_path }}/extract_version.py --pyproject ${{ inputs.file_path }})
         fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT

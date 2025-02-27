@@ -29,8 +29,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if pyversion := get_version(Path(args.pyproject)):
-        with open(os.getenv("GITHUB_ENV"), "a") as env_file:
-            env_file.write(f"VERSION={pyversion}\n")
+        print(pyversion)
     else:
         print("No version found in pyproject.toml")
         exit(1)
