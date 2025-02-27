@@ -1,0 +1,28 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pulsar-test
+  namespace: pulsar
+  labels:
+    app: pulsar
+    cluster: pulsar-test
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: pulsar-test.singlespot.com.
+spec:
+  ports:
+    - name: tcp-pulsar
+      protocol: TCP
+      port: 6650
+      targetPort: 6650
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: pulsar
+    cluster: pulsar-test
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  allocateLoadBalancerNodePorts: true
+  internalTrafficPolicy: Cluster

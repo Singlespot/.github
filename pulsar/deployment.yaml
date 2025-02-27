@@ -1,0 +1,61 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pulsar-test
+  namespace: pulsar
+  labels:
+    app: pulsar
+    cluster: pulsar-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pulsar
+      cluster: pulsar-test
+  template:
+    metadata:
+      labels:
+        app: pulsar
+        cluster: pulsar-test
+      annotations:
+        prometheus.io/path: /metrics/
+        prometheus.io/port: '8080'
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+        - name: pulsar
+          image: apachepulsar/pulsar:2.10.4
+          command:
+            - bin/pulsar
+          args:
+            - standalone
+          ports:
+            - name: tcp-pulsar
+              containerPort: 6650
+              protocol: TCP
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 2Gi
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            allowPrivilegeEscalation: false
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        singlespot.com/spot: 'true'
+      tolerations:
+        - key: singlespot.com/spot
+          operator: Exists
+          effect: NoSchedule
+  revisionHistoryLimit: 10
