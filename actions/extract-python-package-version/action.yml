@@ -12,10 +12,12 @@ inputs:
 outputs:
   version:
     description: "The extracted version"
+    value: ${{ steps.version-extraction.outputs.version }}
 runs:
   using: "composite"
   steps:
     - name: Run version extractor
+      id: version-extraction
       shell: bash
       run: |
         if [ ! -f ${{ inputs.file_path }} ]; then
@@ -29,4 +31,5 @@ runs:
         else
           VERSION=$(python ${{ github.action_path }}/extract_version.py --pyproject ${{ inputs.file_path }})
         fi
+        
         echo "version=$VERSION" >> $GITHUB_OUTPUT
