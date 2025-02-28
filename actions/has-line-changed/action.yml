@@ -63,3 +63,7 @@ runs:
           echo "changed=false" >> $GITHUB_OUTPUT
           grep -E "${{ inputs.line_pattern }}" tmp/${{ inputs.file }} >> $GITHUB_OUTPUT
         fi
+    - name: Cleanup
+      shell: bash
+      run: |
+        rm -rf tmp
