@@ -57,6 +57,7 @@ runs:
         esac
         echo "Diff between ${before} and ${after}"
         cd tmp
+        echo "Before"
         output=$(git diff --unified=0 ${before} ${after} ${{ inputs.file }} | grep -E "${{ inputs.line_pattern }}")
         echo "Output: $output"
         exit_code=$?
@@ -65,7 +66,7 @@ runs:
           echo $output | grep -E "\+${{ inputs.line_pattern }}" | cut -c2- >> $GITHUB_OUTPUT
         else
           echo "changed=false" >> $GITHUB_OUTPUT
-          grep -E "${{ inputs.line_pattern }}" tmp/${{ inputs.file }} >> $GITHUB_OUTPUT
+          grep -E "${{ inputs.line_pattern }}" ${{ inputs.file }} >> $GITHUB_OUTPUT
         fi
     - name: Cleanup
       shell: bash
