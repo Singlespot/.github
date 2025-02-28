@@ -62,7 +62,7 @@ runs:
           echo $output | grep -E "\+${{ inputs.line_pattern }}" | cut -c2- >> $GITHUB_OUTPUT
         else
           echo "changed=false" >> $GITHUB_OUTPUT
-          grep -E "${{ inputs.line_pattern }}" ${{ inputs.file }} >> $GITHUB_OUTPUT
+          echo "line=$(grep -E "${{ inputs.line_pattern }}" ${{ inputs.file }})" >> $GITHUB_OUTPUT
         fi
     - name: Cleanup
       shell: bash
