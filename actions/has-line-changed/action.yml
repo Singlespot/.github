@@ -1,0 +1,65 @@
+name: "Has line changed"
+description: "Check if a line has changed in a file in a pull request or commit"
+author: "Sébastien de Melo <sebastien@singlespot.com>"
+branding:
+  icon: "code"
+  color: "blue"
+inputs:
+  file:
+    description: "File to check"
+    required: true
+  line_pattern:
+    description: "Line pattern to check"
+    required: true
+outputs:
+  changed:
+    description: "Whether the line has changed"
+    value: ${{ steps.has-line-changed.outputs.changed }}
+  line:
+    description: "The line, whether it has changed or not"
+    value: ${{ steps.has-line-changed.outputs.line }}
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure that event is pull_request or push
+      shell: bash
+      run: |
+        if [ "${{ github.event_name }}" != "pull_request" ] && [ "${{ github.event_name }}" != "push" ]; then
+          echo "Event must be pull_request or push"
+          exit 1
+        fi
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        path: tmp
+        fetch-depth: 0
+    - name: Ensure that file exists
+      shell: bash
+      run: |
+        if [ ! -f tmp/${{ inputs.file }} ]; then
+          echo "File not found: ${{ inputs.file }}"
+          exit 1
+        fi
+    - name: Run version extractor
+      id: has-line-changed
+      shell: bash
+      run: |
+        case "${{ github.event_name }}" in
+          push)
+            firstCommit="${{ github.event.commits[0].id }}"
+            lastCommit="${{ github.event.commits[-1].id }}"
+            ;;
+          pull_request)
+            firstCommit="${{ github.event.base_ref }}"
+            lastCommit="${{ github.event.head_ref }}"
+            ;;
+        esac
+        output=$(git diff --unified=0 ${firstCommit}^ ${lastCommit} tmp/${{ inputs.file }} | grep -E "${{ inputs.line_pattern }}")
+        exit_code=$?
+        if [ $exit_code -eq 0 ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo $output | grep -E "\+${{ inputs.line_pattern }}" | cut -c2- >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          grep -E "${{ inputs.line_pattern }}" tmp/${{ inputs.file }} >> $GITHUB_OUTPUT
+        fi
