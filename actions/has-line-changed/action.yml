@@ -42,9 +42,8 @@ runs:
         fi
     - name: Run version extractor
       id: has-line-changed
-      shell: bash
+      shell: bash {0}
       run: |
-        set -e
         case "${{ github.event_name }}" in
           push)
             before="${{ github.event.before }}"
@@ -59,8 +58,8 @@ runs:
         cd tmp
         echo "Before"
         output=$(git diff --unified=0 ${before} ${after} ${{ inputs.file }} | grep -E "${{ inputs.line_pattern }}")
-        echo "Output: $output"
         exit_code=$?
+        echo "Output: $output"
         if [ $exit_code -eq 0 ]; then
           echo "changed=true" >> $GITHUB_OUTPUT
           echo $output | grep -E "\+${{ inputs.line_pattern }}" | cut -c2- >> $GITHUB_OUTPUT
