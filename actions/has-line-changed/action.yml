@@ -44,6 +44,7 @@ runs:
       id: has-line-changed
       shell: bash
       run: |
+        set -e
         case "${{ github.event_name }}" in
           push)
             before="${{ github.event.before }}"
