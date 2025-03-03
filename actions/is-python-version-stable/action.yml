@@ -1,0 +1,22 @@
+name: "Extract Python package version"
+description: "Extracts the Python package version from pyproject.toml, setup.py, or setup.cfg"
+author: "Sébastien de Melo <sebastien@singlespot.com>"
+branding:
+  icon: "code"
+  color: "blue"
+inputs:
+  version:
+    description: "The version to check"
+    required: true
+outputs:
+  stable:
+    description: "Whether the version is stable"
+    value: ${{ steps.version-checker.outputs.stable }}
+runs:
+  using: "composite"
+  steps:
+    - name: Run version checker
+      id: version-checker
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/check_version.py ${{ inputs.version }}
