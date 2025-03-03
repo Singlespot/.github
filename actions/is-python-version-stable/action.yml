@@ -28,5 +28,5 @@ runs:
       id: version-checker
       shell: bash
       run: |
-        pip install packaging
+        python -m pip install packaging
         python ${{ github.action_path }}/check_version.py ${{ inputs.version }}
