@@ -12,6 +12,15 @@ outputs:
   stable:
     description: "Whether the version is stable"
     value: ${{ steps.version-checker.outputs.stable }}
+  dev:
+    description: "Whether the version is dev"
+    value: ${{ steps.version-checker.outputs.dev }}
+  post:
+    description: "Whether the version is post"
+    value: ${{ steps.version-checker.outputs.post }}
+  pre:
+    description: "Whether the version is pre"
+    value: ${{ steps.version-checker.outputs.pre }}
 runs:
   using: "composite"
   steps:
