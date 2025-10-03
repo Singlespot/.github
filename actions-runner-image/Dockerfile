@@ -6,6 +6,7 @@ ENV PATH=/home/runner/.cargo/bin/:$PATH
 
 RUN sudo add-apt-repository ppa:deadsnakes/ppa && \
   sudo apt-get update && \
+  sudo apt-get upgrade -y && \
   sudo apt-get install -y curl unzip \
     python3.13 python3.13-dev python3.13-venv \
     python3.12 python3.12-dev python3.12-venv \
@@ -13,13 +14,16 @@ RUN sudo add-apt-repository ppa:deadsnakes/ppa && \
   sudo apt-get clean
 
 RUN python3.13 -m ensurepip --upgrade && \
-    python3.13 -m pip install --upgrade pip
+    python3.13 -m pip install --upgrade pip && \
+    python3.13 -m pip list --outdated | awk 'NR>2 {print $1}' | xargs -n1 -i sh -c  "python3.13 -m pip install --upgrade {} || true"
 
 RUN python3.12 -m ensurepip --upgrade && \
-    python3.12 -m pip install --upgrade pip
+    python3.12 -m pip install --upgrade pip && \
+    python3.12 -m pip list --outdated | awk 'NR>2 {print $1}' | xargs -n1 -i sh -c  "python3.12 -m pip install --upgrade {} || true"
 
 RUN python3.11 -m ensurepip --upgrade && \
-    python3.11 -m pip install --upgrade pip
+    python3.11 -m pip install --upgrade pip && \
+    python3.11 -m pip list --outdated | awk 'NR>2 {print $1}' | xargs -n1 -i sh -c  "python3.11 -m pip install --upgrade {} || true"
 
 RUN sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.13 10 && \
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.13 10
