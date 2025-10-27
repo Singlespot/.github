@@ -10,7 +10,7 @@ ENV PATH=/home/runner/.cargo/bin/:$PATH
 RUN sudo add-apt-repository ppa:deadsnakes/ppa && \
   sudo apt-get update && \
   sudo apt-get upgrade -y && \
-  sudo apt-get install -y amazon-ecr-credential-helper curl unzip \
+  sudo apt-get install -y curl unzip \
     python3.13 python3.13-dev python3.13-venv \
     python3.12 python3.12-dev python3.12-venv \
     python3.11 python3.11-dev python3.11-venv && \
@@ -42,5 +42,5 @@ RUN case ${TARGETARCH} in \
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 
-RUN mkdir -p /home/runner/.docker && \
-    echo "{ \"credHelpers\": { \"${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com\": \"ecr-login\" } }" > /home/runner/.docker/config.json
+#RUN mkdir -p /home/runner/.docker && \
+#    echo "{ \"credHelpers\": { \"${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com\": \"ecr-login\" } }" > /home/runner/.docker/config.json
